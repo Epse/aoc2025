@@ -9,12 +9,15 @@ pub fn run() {
         .lines()
         .filter_map(|x| convert(&x.expect("IDK I need a line")))
         .collect();
-    let result = compute(&instructions);
-    println!("Reached 0 {} times", result)
+    let result_one = compute_part_one(&instructions);
+    println!("Reached 0 {} times", result_one);
+
+    let result_two = compute_part_two(&instructions);
+    println!("Part two: {} zeroes", result_two);
 }
 
 /// Calculates how often the dial is at 0 at the end of an operation.
-fn compute(input: &Vec<i32>) -> u32 {
+fn compute_part_one(input: &Vec<i32>) -> u32 {
     let mut count: u32 = 0;
     let mut dial: i64 = 50;
 
@@ -25,6 +28,34 @@ fn compute(input: &Vec<i32>) -> u32 {
         }
     }
     count
+}
+
+/// Returns dial, zeroes
+fn zeroes_in_one_click(current_pos: i32, movement: i32, current_zeroes: u32) -> (i32, u32) {
+    // This is the most lazy implementation I could think of
+    let mut zeroes: u32 = current_zeroes;
+    let mut dial = current_pos;
+
+    let sign = movement.signum();
+
+    for _ in 0..movement.abs() {
+        dial = (dial + sign) % 100;
+        if dial == 0 {
+            zeroes += 1;
+        }
+    }
+
+    (dial, zeroes)
+}
+
+
+fn compute_part_two(input: &Vec<i32>) -> u32 {
+    input
+        .iter()
+        .fold((50, 0), |(dial, zeroes), motion| {
+            zeroes_in_one_click(dial, *motion, zeroes)
+        })
+        .1
 }
 
 /// Converts text representation to a vec of numbers, L being negative
@@ -66,6 +97,11 @@ L82";
     #[test]
     fn test_full_flow() {
         // Look this could all just run as iterators but I am far ,far too lazy
-        assert_eq!(3, compute(&INPUT.lines().filter_map(convert).collect()))
+        assert_eq!(3, compute_part_one(&INPUT.lines().filter_map(convert).collect()))
+    }
+
+    #[test]
+    fn test_zeroes_one_click() {
+        assert_eq!(6, compute_part_two(&INPUT.lines().filter_map(|x| convert(x)).collect()))
     }
 }
