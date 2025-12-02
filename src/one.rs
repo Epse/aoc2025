@@ -48,7 +48,6 @@ fn zeroes_in_one_click(current_pos: i32, movement: i32, current_zeroes: u32) -> 
     (dial, zeroes)
 }
 
-
 fn compute_part_two(input: &Vec<i32>) -> u32 {
     input
         .iter()
@@ -90,18 +89,27 @@ L82";
     fn test_convert() {
         assert_eq!(
             vec![-68, -30, 48, -5, 60, -55, -1, -99, 14, -82],
-            INPUT.lines().filter_map(|x| convert(x)).collect::<Vec<i32>>()
+            INPUT
+                .lines()
+                .filter_map(|x| convert(x))
+                .collect::<Vec<i32>>()
         )
     }
 
     #[test]
     fn test_full_flow() {
         // Look this could all just run as iterators but I am far ,far too lazy
-        assert_eq!(3, compute_part_one(&INPUT.lines().filter_map(convert).collect()))
+        assert_eq!(
+            3,
+            compute_part_one(&INPUT.lines().filter_map(convert).collect())
+        )
     }
 
     #[test]
     fn test_zeroes_one_click() {
-        assert_eq!(6, compute_part_two(&INPUT.lines().filter_map(|x| convert(x)).collect()))
+        assert_eq!(
+            6,
+            compute_part_two(&INPUT.lines().filter_map(|x| convert(x)).collect())
+        )
     }
 }

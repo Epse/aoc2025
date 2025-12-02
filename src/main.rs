@@ -1,7 +1,10 @@
 use clap::{Parser, Subcommand};
 
 mod one;
+mod util;
 use one::run as run_one;
+mod two;
+use two::run as run_two;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -15,6 +18,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     One {},
+    Two {},
 }
 
 fn main() {
@@ -22,5 +26,6 @@ fn main() {
 
     match &cli.command {
         Commands::One {} => run_one(),
+        Commands::Two {} => run_two(),
     };
 }
