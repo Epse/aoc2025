@@ -62,7 +62,7 @@ fn zeroes_in_one_click(current_pos: i32, movement: i32, current_zeroes: u32) -> 
 
 fn zeroes_but_faster(mut dial: i32, movement: i32, mut zeroes: u32) -> (i32, u32) {
     let started_at_zero = dial == 0;
-    
+
     dial += movement;
 
     zeroes += (dial.abs() as u32) / 100;

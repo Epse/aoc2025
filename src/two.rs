@@ -67,7 +67,7 @@ fn is_n_repeated(input: &u64) -> bool {
 
         let part: String = text.chars().take(count).collect();
         if part.repeat(times) == text {
-            return true
+            return true;
         }
     }
     false
