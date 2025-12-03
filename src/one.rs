@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
+use std::time::Instant;
 
 pub fn run() {
     let path = Path::new("data/one");
@@ -12,8 +13,19 @@ pub fn run() {
     let result_one = compute_part_one(&instructions);
     println!("Reached 0 {} times", result_one);
 
-    let result_two = compute_part_two(&instructions);
-    println!("Part two: {} zeroes", result_two);
+    {
+        let start = Instant::now();
+        let result_two = compute_part_two(&instructions);
+        let elapsed = start.elapsed();
+        println!("Part two: {} zeroes, elapsed: {:.2?}", result_two, elapsed);
+    }
+
+    {
+        let start = Instant::now();
+        let result_fast = compute_faster(&instructions);
+        let elapsed = start.elapsed();
+        println!("Part two faster: {} , time: {:.2?}", result_fast, elapsed);
+    }
 }
 
 /// Calculates how often the dial is at 0 at the end of an operation.
@@ -48,11 +60,35 @@ fn zeroes_in_one_click(current_pos: i32, movement: i32, current_zeroes: u32) -> 
     (dial, zeroes)
 }
 
+fn zeroes_but_faster(mut dial: i32, movement: i32, mut zeroes: u32) -> (i32, u32) {
+    let started_at_zero = dial == 0;
+    
+    dial += movement;
+
+    zeroes += (dial.abs() as u32) / 100;
+
+    if dial <= 0 && !started_at_zero {
+        zeroes += 1;
+    }
+
+    let result = (dial.rem_euclid(100), zeroes);
+    result
+}
+
 fn compute_part_two(input: &Vec<i32>) -> u32 {
     input
         .iter()
         .fold((50, 0), |(dial, zeroes), motion| {
             zeroes_in_one_click(dial, *motion, zeroes)
+        })
+        .1
+}
+
+fn compute_faster(input: &Vec<i32>) -> u32 {
+    input
+        .iter()
+        .fold((50, 0), |(dial, zeroes), motion| {
+            zeroes_but_faster(dial, *motion, zeroes)
         })
         .1
 }
@@ -110,6 +146,14 @@ L82";
         assert_eq!(
             6,
             compute_part_two(&INPUT.lines().filter_map(|x| convert(x)).collect())
+        )
+    }
+
+    #[test]
+    fn test_two_faster() {
+        assert_eq!(
+            6,
+            compute_faster(&INPUT.lines().filter_map(|x| convert(x)).collect())
         )
     }
 }
