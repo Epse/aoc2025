@@ -9,6 +9,8 @@ mod three;
 use three::run as run_three;
 mod four;
 use four::run as run_four;
+mod five;
+use five::run as run_five;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -21,19 +23,29 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    All {},
     One {},
     Two {},
     Three {},
     Four {},
+    Five {},
 }
 
 fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
+        Commands::All {} => {
+            run_one();
+            run_two();
+            run_three();
+            run_four();
+            run_five();
+        }
         Commands::One {} => run_one(),
         Commands::Two {} => run_two(),
         Commands::Three {} => run_three(),
         Commands::Four {} => run_four(),
+        Commands::Five {} => run_five(),
     };
 }
