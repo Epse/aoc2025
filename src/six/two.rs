@@ -1,6 +1,6 @@
+use super::transpose;
 use super::Compute;
 use super::MathOp;
-use super::transpose;
 
 pub fn part_two(input: &str) -> i64 {
     let input = input.strip_suffix("\n").unwrap_or(input); // We don't want trailing newlines, they get confusing
@@ -14,11 +14,13 @@ pub fn part_two(input: &str) -> i64 {
         .collect();
 
     let number_section = input
-        .lines().take(line_count - 1)
+        .lines()
+        .take(line_count - 1)
         .map(|line| line.chars().collect())
         .collect::<Vec<Vec<char>>>();
 
-    let number_run = transpose(number_section).into_iter()
+    let number_run = transpose(number_section)
+        .into_iter()
         .map(|line| line.into_iter().collect::<String>())
         .map(|line| line.trim_ascii().to_string())
         .map(|line| line.parse::<i64>().ok()); // Now we have Some(num), Some(num), None, repeat. Each run needs to be one group!
@@ -38,7 +40,7 @@ pub fn part_two(input: &str) -> i64 {
         .enumerate()
         .map(|(idx, nums)| Compute {
             operation: ops[idx],
-            numbers: nums
+            numbers: nums,
         })
         .fold(0_i64, |acc, c| c + acc)
 }

@@ -22,13 +22,6 @@ pub fn run() {
     }
 }
 
-#[allow(dead_code)]
-fn display_grid(grid: &Vec<Vec<char>>) -> String {
-    grid.iter()
-        .map(|row| row.iter().collect::<String>() + "\n")
-        .collect::<String>()
-}
-
 fn string_to_grid(input: &str) -> Vec<Vec<char>> {
     let mut row: Vec<char> = vec![];
     let mut grid: Vec<Vec<char>> = vec![];
@@ -176,6 +169,7 @@ fn part_two(input: &str) -> u64 {
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::util::display_grid;
 
     const INPUT: &str = "..@@.@@@@.
 @@@.@.@.@@
