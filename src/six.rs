@@ -1,9 +1,21 @@
-use std::ops::Add;
+use std::{ops::Add, time::Instant};
+mod two;
+use two::part_two;
 
 pub fn run() {
     let input = std::fs::read_to_string("data/six").expect("I need data wth");
-    let result = part_one(&input);
-    println!("Part one: {}", result);
+    {
+        let start = Instant::now();
+        let result = part_one(&input);
+        let elapsed = start.elapsed();
+        println!("Part one: {}, time: {:.2?}", result, elapsed);
+    }
+    {
+        let start = Instant::now();
+        let result = part_two(&input);
+        let elapsed = start.elapsed();
+        println!("Part two: {}, time: {:.2?}", result, elapsed);
+    }
 }
 
 fn part_one(input: &str) -> i64 {
@@ -39,11 +51,12 @@ fn string_to_computes(input: &str) -> Vec<Compute> {
         .collect::<Vec<Vec<i64>>>();
 
     let number_lines = transpose(number_lines); // This is now a vec of columns!
-    number_lines.into_iter()
+    number_lines
+        .into_iter()
         .enumerate()
         .map(|(idx, numbers)| Compute {
             numbers: numbers,
-            operation: ops[idx]
+            operation: ops[idx],
         })
         .collect()
 }
@@ -65,7 +78,7 @@ fn transpose<T>(v: Vec<Vec<T>>) -> Vec<Vec<T>> {
         .collect()
 }
 
-
+#[derive(Debug)]
 struct Compute {
     numbers: Vec<i64>,
     operation: MathOp,
