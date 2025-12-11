@@ -15,7 +15,10 @@ pub fn run() {
         let start = Instant::now();
         let count = part_two(&input);
         let elapsed = start.elapsed();
-        println!("Part one: {} , time taken (including gridify): {:.2?}", count, elapsed);
+        println!(
+            "Part one: {} , time taken (including gridify): {:.2?}",
+            count, elapsed
+        );
     }
 }
 
@@ -137,19 +140,19 @@ fn erase_reachable(input: &Vec<Vec<char>>) -> (u64, Vec<Vec<char>>) {
     let mut erased: u64 = 0;
 
     let result = input
-            .iter()
-            .map(|row| {
-                row.iter()
-                    .map(|c| {
-                        if *c == 'x' {
-                            erased += 1;
-                            '.'
-                        } else {
-                            *c
-                        }
-                    })
-                    .collect()
-            })
+        .iter()
+        .map(|row| {
+            row.iter()
+                .map(|c| {
+                    if *c == 'x' {
+                        erased += 1;
+                        '.'
+                    } else {
+                        *c
+                    }
+                })
+                .collect()
+        })
         .collect();
     (erased, result)
 }
