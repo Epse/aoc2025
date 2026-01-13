@@ -15,6 +15,8 @@ mod six;
 use six::run as run_six;
 mod seven;
 use seven::run as run_seven;
+mod eight;
+use eight::run as run_eight;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -27,14 +29,15 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    All {},
-    One {},
-    Two {},
-    Three {},
-    Four {},
-    Five {},
-    Six {},
-    Seven {},
+    All,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
 }
 
 fn main() {
@@ -49,13 +52,15 @@ fn main() {
             run_five();
             run_six();
             run_seven();
+            run_eight();
         }
-        Commands::One {} => run_one(),
-        Commands::Two {} => run_two(),
-        Commands::Three {} => run_three(),
-        Commands::Four {} => run_four(),
-        Commands::Five {} => run_five(),
-        Commands::Six {} => run_six(),
-        Commands::Seven {} => run_seven(),
+        Commands::One => run_one(),
+        Commands::Two => run_two(),
+        Commands::Three => run_three(),
+        Commands::Four => run_four(),
+        Commands::Five => run_five(),
+        Commands::Six => run_six(),
+        Commands::Seven => run_seven(),
+        Commands::Eight => run_eight(),
     };
 }

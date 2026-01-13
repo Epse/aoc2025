@@ -111,11 +111,7 @@ fn map_accessible(input: Vec<Vec<char>>) -> Vec<Vec<char>> {
                         adjacent += 1;
                     }
 
-                    if adjacent < 4 {
-                        'x'
-                    } else {
-                        *elem
-                    }
+                    if adjacent < 4 { 'x' } else { *elem }
                 })
                 .collect()
         })

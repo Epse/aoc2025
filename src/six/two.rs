@@ -1,6 +1,6 @@
-use super::transpose;
 use super::Compute;
 use super::MathOp;
+use super::transpose;
 
 pub fn part_two(input: &str) -> i64 {
     let input = input.strip_suffix("\n").unwrap_or(input); // We don't want trailing newlines, they get confusing

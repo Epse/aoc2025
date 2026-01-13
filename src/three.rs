@@ -50,11 +50,7 @@ fn bank_max_joltage(bank: &str) -> u32 {
         .max_by(|x, y| {
             let cmp = x.1.cmp(&y.1);
             // max_by keeps the last one, so if theyre equal we keep the first one..
-            if cmp.is_eq() {
-                Ordering::Greater
-            } else {
-                cmp
-            }
+            if cmp.is_eq() { Ordering::Greater } else { cmp }
         })
         .expect("No biggest digit??");
     let max_single = bank
@@ -82,11 +78,7 @@ fn max_for_n_digits(bank: &str, n: usize, start_val: u64) -> u64 {
         .max_by(|x, y| {
             let cmp = x.1.cmp(&y.1);
             // max_by keeps the last one, so if theyre equal we keep the first one..
-            if cmp.is_eq() {
-                Ordering::Greater
-            } else {
-                cmp
-            }
+            if cmp.is_eq() { Ordering::Greater } else { cmp }
         })
         .expect("We need a max");
     let val: u64 = digit * 10_u64.pow(n as u32 - 1);

@@ -1,4 +1,7 @@
-use std::{fmt::{Error, Formatter, Display}, time::Instant};
+use std::{
+    fmt::{Display, Error, Formatter},
+    time::Instant,
+};
 
 use crate::util::display_grid;
 
@@ -89,7 +92,10 @@ fn input_to_grid(input: &str) -> Vec<Vec<GridCell>> {
 }
 
 fn timelines(counted: &Vec<Vec<GridCell>>) -> u64 {
-    counted.last().expect("Need a last row").iter()
+    counted
+        .last()
+        .expect("Need a last row")
+        .iter()
         .filter_map(|x| {
             if let GridCell::Empty(beams) = x {
                 Some(beams)
@@ -123,12 +129,16 @@ impl TryFrom<char> for GridCell {
 
 impl Display for GridCell {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "{}", match self {
-            GridCell::Emitter => 'S'.into(),
-            GridCell::Splitter => '^'.into(),
-            GridCell::Empty(0) => '.'.into(),
-            GridCell::Empty(x) => x.to_string()
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                GridCell::Emitter => 'S'.into(),
+                GridCell::Splitter => '^'.into(),
+                GridCell::Empty(0) => '.'.into(),
+                GridCell::Empty(x) => x.to_string(),
+            }
+        )
     }
 }
 
@@ -146,11 +156,17 @@ fn count_timelines(mut input: Vec<Vec<GridCell>>) -> Vec<Vec<GridCell>> {
             if c != GridCell::Splitter {
                 continue;
             }
-            if let GridCell::Empty(source_beams) = input[row_idx - 1][col_idx] && source_beams > 0 {
-                if col_idx > 0 && let GridCell::Empty(beams) = input[row_idx][col_idx - 1] {
+            if let GridCell::Empty(source_beams) = input[row_idx - 1][col_idx]
+                && source_beams > 0
+            {
+                if col_idx > 0
+                    && let GridCell::Empty(beams) = input[row_idx][col_idx - 1]
+                {
                     input[row_idx][col_idx - 1] = GridCell::Empty(source_beams + beams);
                 }
-                if col_idx < input[row_idx].len() && let GridCell::Empty(beams) = input[row_idx][col_idx + 1] {
+                if col_idx < input[row_idx].len()
+                    && let GridCell::Empty(beams) = input[row_idx][col_idx + 1]
+                {
                     input[row_idx][col_idx + 1] = GridCell::Empty(beams + source_beams);
                 }
             }
@@ -169,7 +185,6 @@ fn count_timelines(mut input: Vec<Vec<GridCell>>) -> Vec<Vec<GridCell>> {
                 }
             }
         }
-
     }
 
     input
