@@ -6,6 +6,12 @@ pub fn run() {
         let elapsed = start.elapsed();
         println!("Day 8 part one: {}, elapsed: {:.2?}", result, elapsed);
     }
+    {
+        let start = Instant::now();
+        let result = part_two(&input);
+        let elapsed = start.elapsed();
+        println!("Day 8 part two: {}, elapsed: {:.2?}", result, elapsed);
+    }
 }
 
 mod link;
@@ -45,6 +51,26 @@ fn part_one(input: &str, connection_count: usize) -> u64 {
     let mut counts = uf.sizes().clone();
     counts.sort();
     counts.into_iter().rev().take(3).fold(1u64, |acc, elem| acc * elem as u64)
+}
+
+fn part_two(input: &str) -> u64 {
+    let coords = parse_coordinates(input);
+    let distances = calculate_distances(&coords);
+    let mut distances = distances.into_iter().collect::<Vec<(i64, Link)>>();
+    // Unstable sort be zoomin more
+    distances.sort_unstable_by(|(a, _link_a), (b, _link_b)| b.cmp(a));
+
+    let mut uf = UnionFind::from_values(coords);
+
+    loop {
+        let link = distances.pop().expect("We should have enough");
+        let link = link.1.split();
+        let merged = uf.union_values(&link.0, &link.1).expect("Missing items??");
+        if uf.set_count() == 1 && merged {
+            dbg!(&link);
+            return link.0.x as u64 * link.1.x as u64
+        }
+    }
 }
 
 fn calculate_distances(input: &Vec<Vector3>) -> HashMap<i64, Link> {
