@@ -46,11 +46,15 @@ fn part_one(input: &str, connection_count: usize) -> u64 {
         let link = link.1.split();
         let _ = uf.union_values(&link.0, &link.1).expect("Missing items??");
     }
-    
+
     println!("We have {} circuits", uf.set_count());
     let mut counts = uf.sizes().clone();
     counts.sort();
-    counts.into_iter().rev().take(3).fold(1u64, |acc, elem| acc * elem as u64)
+    counts
+        .into_iter()
+        .rev()
+        .take(3)
+        .fold(1u64, |acc, elem| acc * elem as u64)
 }
 
 fn part_two(input: &str) -> u64 {
@@ -68,7 +72,7 @@ fn part_two(input: &str) -> u64 {
         let merged = uf.union_values(&link.0, &link.1).expect("Missing items??");
         if uf.set_count() == 1 && merged {
             dbg!(&link);
-            return link.0.x as u64 * link.1.x as u64
+            return link.0.x as u64 * link.1.x as u64;
         }
     }
 }

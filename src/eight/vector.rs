@@ -34,9 +34,7 @@ impl<'a, 'b> BitXor<&'a Vector3> for &'b Vector3 {
 
     /// Returns squared distance
     fn bitxor(self, other: &Vector3) -> Self::Output {
-        (self.x - other.x).pow(2)
-            + (self.y - other.y).pow(2)
-            + (self.z - other.z).pow(2)
+        (self.x - other.x).pow(2) + (self.y - other.y).pow(2) + (self.z - other.z).pow(2)
     }
 }
 
@@ -68,8 +66,12 @@ mod test {
 
     #[test]
     fn test_basic_distance() {
-        let a = Vector3{x: 0, y: 0, z: 0};
-        let b = Vector3{x: 90000, y: 0, z: 0};
+        let a = Vector3 { x: 0, y: 0, z: 0 };
+        let b = Vector3 {
+            x: 90000,
+            y: 0,
+            z: 0,
+        };
         let dist = &a ^ &b;
         assert_eq!(90000i64.pow(2), dist);
         assert_eq!(90000i64.pow(2), b ^ a);
