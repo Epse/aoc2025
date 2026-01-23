@@ -5,11 +5,12 @@ use std::path::Path;
 use std::time::Instant;
 
 mod compress;
-use compress::coordinate_compress;
+use compress::{coordinate_compress, decompress};
 mod two;
+use itertools::Itertools;
 use two::*;
 
-pub fn run() {
+pub fn run(debug: bool) {
     let path = Path::new("data/nine");
     let file = File::open(&path).expect("Need input file");
     let coordinates = io::BufReader::new(file)
@@ -26,7 +27,7 @@ pub fn run() {
 
     {
         let start = Instant::now();
-        let result = part_two(&coordinates);
+        let result = part_two(&coordinates, debug);
         let elapsed = start.elapsed();
         println!("Day 9 part 2: {}, elapsed: {:.2?}", result, elapsed);
     }
@@ -53,7 +54,7 @@ fn area(x: (u32, u32), y: (u32, u32)) -> u64 {
     (x.0.abs_diff(y.0) as u64 + 1) * (x.1.abs_diff(y.1) as u64 + 1)
 }
 
-fn part_two(input: &Vec<(u32, u32)>) -> u64 {
+fn part_two(input: &Vec<(u32, u32)>, debug: bool) -> u64 {
     // We compress the coordinates. We can decompress by index lookup
     let compressed = coordinate_compress(input);
 
@@ -63,13 +64,26 @@ fn part_two(input: &Vec<(u32, u32)>) -> u64 {
     let mut grid = vec![vec![Field::Outside; y_max + 1];  x_max + 1];
 
     mark_edges(&compressed, &mut grid);
+    if debug {
+        println!("{}", map_to_string(&grid));
+    }
 
     // Now my strategy is finding a point inside, flood filling and then trying every rectangle lol
     let point = find_point_inside(&grid).expect("There needs to be a point in");
     flood_fill(point, &mut grid);
+    if debug {
+        println!("{}", map_to_string(&grid));
+    }
 
 
-    todo!();
+    compressed.iter()
+        .combinations(2)
+        .map(|a| (*a[0], *a[1]))
+        .filter(|(a, b)| rect_valid(a, b, &grid))
+        .filter_map(|(a, b)| Some((decompress(&a, &compressed, input)?, decompress(&b, &compressed, input)?)))
+        .map(|(a, b)| area(a, b))
+        .max()
+        .expect("Need to have at least one valid rectangle lols")
 }
 
 #[cfg(test)]
@@ -94,5 +108,20 @@ mod test {
     #[test]
     fn test_some_areas() {
         assert_eq!(24, area((2, 5), (9, 7)));
+    }
+
+    #[test]
+    fn test_part_two() {
+        let input: Vec<(u32, u32)> = vec![
+            (7, 1),
+            (11, 1),
+            (11, 7),
+            (9, 7),
+            (9, 5),
+            (2, 5),
+            (2, 3),
+            (7, 3),
+        ];
+        assert_eq!(24u64, part_two(&input, true));
     }
 }

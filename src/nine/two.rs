@@ -263,6 +263,17 @@ pub fn map_to_string(map: &Vec<Vec<Field>>) -> String {
     a
 }
 
+pub fn rect_valid(a: &(usize, usize), b: &(usize, usize), map: &Vec<Vec<Field>>) -> bool {
+    for x in min(a.0, b.0)..=max(a.0, b.0) {
+        for y in min(a.1, b.1)..=max(a.1, b.1) {
+            if map[x][y] == Field::Outside {
+                return false;
+            }
+        }
+    }
+    true
+}
+
 #[cfg(test)]
 mod test {
     use super::*;

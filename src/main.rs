@@ -56,7 +56,7 @@ fn main() {
             run_six();
             run_seven();
             run_eight();
-            run_nine();
+            run_nine(cli.debug);
         }
         Commands::One => run_one(),
         Commands::Two => run_two(),
@@ -66,6 +66,6 @@ fn main() {
         Commands::Six => run_six(),
         Commands::Seven => run_seven(),
         Commands::Eight => run_eight(),
-        Commands::Nine => run_nine(),
+        Commands::Nine => run_nine(cli.debug),
     };
 }
